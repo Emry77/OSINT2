@@ -67,12 +67,13 @@ def search_social_media_accounts(nama_input, key):
 
 def main():
     os.system("clear")
-    print("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ")
-    print("    Tools Osint SOCIAL Media")
-    print("        -CREATE BY MRY07XPLOIT -")
-    print("    MEDAN CYBER TEAM  ")
-    print("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ")
-
+    print(
+     __________________________________________________
+    |            Created by Mry07Xploit                |
+    |              on 2024 16.04                       |
+    |    Instagram https://www.instagram.com/emry_sec  |
+    |__________________________________________________|
+    )
     nama_input = input("Masukkan nama akun yang ingin dicari: ").strip()
     kunci = getpass("Masukkan key: ").strip()
     search_social_media_accounts(nama_input, kunci)
