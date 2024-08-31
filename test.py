@@ -67,8 +67,7 @@ def search_social_media_accounts(nama_input, key):
 
 def main():
     os.system("clear")
-    print(
-     __________________________________________________
+    print(________________________________________________
     |            Created by Mry07Xploit                |
     |              on 2024 16.04                       |
     |    Instagram https://www.instagram.com/emry_sec  |
