@@ -1,16 +1,20 @@
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 import time
 import os
 from getpass import getpass
 
 def search_google(query):
-    # Setup ChromeDriver
+    # Setup ChromeDriver with additional options
     options = webdriver.ChromeOptions()
     options.add_argument("--headless")  # Run in headless mode (without opening the browser)
+    options.add_argument("--no-sandbox")  # Bypass OS security model
+    options.add_argument("--disable-dev-shm-usage")  # Overcome limited resource problems
+    options.add_argument("--remote-debugging-port=9222")  # Enable remote debugging
+
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
     # Open Google
