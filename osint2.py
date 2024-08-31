@@ -1,43 +1,36 @@
-import requests
-from bs4 import BeautifulSoup
-import urllib.parse
-from getpass import getpass
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+import time
 import os
+from getpass import getpass
 
-def get_redirected_url(url):
-    try:
-        response = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'})
-        response.raise_for_status()
-        return response.url
-    except requests.exceptions.RequestException:
-        return "loading"
+def search_google(query):
+    # Setup ChromeDriver
+    options = webdriver.ChromeOptions()
+    options.add_argument("--headless")  # Run in headless mode (without opening the browser)
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
-def clean_url(url):
-    url = urllib.parse.unquote(url)
-    url = url.split('&sa=U&')[0]
-    url = url.split('&usg=')[0]
-    url = url.split('?_rdc=1&_rdr')[0]
-    return url
+    # Open Google
+    driver.get("https://www.google.com")
+    search_box = driver.find_element(By.NAME, "q")
+    search_box.send_keys(query + Keys.RETURN)
 
-def get_google_search_results(query):
-    try:
-        response = requests.get(query, headers={'User-Agent': 'Mozilla/5.0'})
-        response.raise_for_status()
-        soup = BeautifulSoup(response.text, 'html.parser')
-        return soup.find_all('a')
-    except requests.exceptions.RequestException:
-        return []
+    # Wait for results to load
+    time.sleep(2)
 
-def extract_urls(links):
-    urls = []
+    # Collect all search result links
+    links = driver.find_elements(By.XPATH, "//div[@class='yuRUbf']/a")
+
+    results = []
     for link in links:
-        href = link.get('href')
-        if href and href.startswith('/url?q='):
-            url = href[7:]
-            url = clean_url(url)
-            if 'google.com' not in url:
-                urls.append(url)
-    return urls
+        href = link.get_attribute('href')
+        results.append(href)
+
+    driver.quit()
+    return results
 
 def print_social_media_links(platform, links, nama_input):
     print(f"Akun {platform} untuk nama '{nama_input}':")
@@ -58,9 +51,7 @@ def search_social_media_accounts(nama_input, key):
 
     for platform, search_query in platforms.items():
         query = f'intext:"{nama_input}" {search_query}'
-        url = f'https://www.google.com/search?q={urllib.parse.quote(query)}'
-        search_results = get_google_search_results(url)
-        social_media_links = extract_urls(search_results)
+        social_media_links = search_google(query)
 
         if social_media_links:
             print_social_media_links(platform, social_media_links, nama_input)
