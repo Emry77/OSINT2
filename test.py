@@ -67,9 +67,9 @@ def search_social_media_accounts(nama_input, key):
 
 def main():
     os.system("clear")
-    print(     =============================================)
-   print( |            Created by Mry07Xploit                |)
-    print(|    Instagram https://www.instagram.com/emry_sec  |)
+    print( "    =============================================")
+    print("|             Created by Mry07Xploit                |")
+    print ("   Instagram https://www.instagram.com/emry_sec  |")
     nama_input = input("Masukkan nama akun yang ingin dicari: ").strip()
     kunci = getpass("Masukkan key: ").strip()
     search_social_media_accounts(nama_input, kunci)
