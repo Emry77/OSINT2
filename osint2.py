@@ -4,6 +4,7 @@ import urllib.parse
 from getpass import getpass
 import os
 import time
+import random
 
 def get_redirected_url(url):
     try:
@@ -26,10 +27,26 @@ def get_google_search_results(query):
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
         'Accept-Language': 'en-US,en;q=0.5',
         'Referer': 'https://www.google.com/',
+        'DNT': '1',
+        'Connection': 'keep-alive',
+        'Upgrade-Insecure-Requests': '1'
     }
+    
+    session = requests.Session()
+    session.headers.update(headers)
+
     try:
-        response = requests.get(query, headers=headers, timeout=10)
+        # Simulate human-like behavior
+        time.sleep(random.uniform(1, 3))
+        
+        # First, visit Google homepage
+        session.get('https://www.google.com', timeout=10)
+        
+        # Then perform the search
+        time.sleep(random.uniform(1, 3))
+        response = session.get(query, timeout=10)
         response.raise_for_status()
+        
         soup = BeautifulSoup(response.text, 'html.parser')
         return soup.find_all('a')
     except requests.exceptions.RequestException as e:
@@ -77,7 +94,7 @@ def search_social_media_accounts(nama_input, key):
                         social_media_links.add(redirected_url)
 
         print_social_media_links(platform, social_media_links, nama_input)
-        time.sleep(2)  # Add a delay between searches to avoid rate limiting
+        time.sleep(random.uniform(5, 10))  # Random delay between searches
 
 def main():
     os.system('cls' if os.name == 'nt' else 'clear')
